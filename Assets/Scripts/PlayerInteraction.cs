@@ -13,7 +13,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (Input.GetKeyDown(interactKey))
         {
-            Debug.Log("pressed " + interactKey);
+            // Debug.Log("pressed " + interactKey);
             TryInteract();
         }
     }
@@ -29,7 +29,7 @@ public class PlayerInteraction : MonoBehaviour
             if (interactable != null)
             {
                 // Call the interact method on the interactable object.
-                Debug.Log("calling interactable method");
+                // Debug.Log("calling interactable method");
                 interactable.Interact();
             }
         }

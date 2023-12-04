@@ -1,12 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    private GameManager gameManager;
+    private GameManager gm;
 
     private static PlayerController instance;
 
@@ -18,11 +19,17 @@ public class PlayerController : MonoBehaviour
     private GameObject obj1;
 
     private bool isYoung = false;
+
+
     
     // Player sprite stuff
-    public Sprite[] playerSprites;
+    // public Sprite[] playerSprites;
+    // public Sprite[] pss1;
+    // public Sprite[] pss2;
+    // public Sprite[] pss3;
     private SpriteRenderer SpriteRenderer;
-    private int currentSpriteIndex = 0;
+    // private int currentSpriteIndex = 0;
+    
 
 
     [SerializeField] private LayerMask jumpableGround;
@@ -31,6 +38,14 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Player young;
     [SerializeField] private Player old;
+    [SerializeField] private Player young1;
+    [SerializeField] private Player old1;    
+    [SerializeField] private Player young2;
+    [SerializeField] private Player old2;    
+    [SerializeField] private Player young3;
+    [SerializeField] private Player old3;    
+    [SerializeField] private Player young4;
+    [SerializeField] private Player old4;
     
     [System.Serializable]
     private struct Player
@@ -56,12 +71,12 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         // Find the GameManager in the scene
-        gameManager = FindObjectOfType<GameManager>();
+        gm = FindObjectOfType<GameManager>();
         rb_player = GetComponent<Rigidbody2D>();
         groundedCheck = GetComponent<BoxCollider2D>();
         SpriteRenderer = GetComponent<SpriteRenderer>();
         
-        PickPlayer();
+        NewPickPlayer();
     }
 
     private void Update()
@@ -70,13 +85,18 @@ public class PlayerController : MonoBehaviour
         float tempSpeed = Speed;
         float tempJump = Jump;
         
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            Debug.Log("pressed f");
+            // Debug.Log("pressed f");
             isYoung = !isYoung;
-            PickPlayer();
+            NewPickPlayer();
             // Toggle between loading the next and previous levels
-            LoadNextOrPreviousLevel();
+            // LoadNextOrPreviousLevel();
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            NewPickPlayer();
         }
         float dirX = Input.GetAxisRaw("Horizontal");
 
@@ -93,18 +113,18 @@ public class PlayerController : MonoBehaviour
         int currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
         int targetLevelIndex = CalculateTargetLevelIndex(currentLevelIndex);
 
-        Debug.Log("loaded next level");
+        // Debug.Log("loaded next level");
         
-        Debug.Log("Player current pos: " + transform.position);
+        // Debug.Log("Player current pos: " + transform.position);
 
         // save the player's current position before loading a new level
-        gameManager.SavePlayerPosition(transform.position);
+        gm.SavePlayerPosition(transform.position);
 
         // load the target level
         SceneManager.LoadScene(targetLevelIndex);
 
         // place the player at the saved position in the new level
-        transform.position = gameManager.savedPlayerPosition;
+        transform.position = gm.savedPlayerPosition;
         Debug.Log("updated player transform");
     }
 
@@ -142,5 +162,72 @@ public class PlayerController : MonoBehaviour
             Speed = old.Speed;
             Jump = old.Jump;
         }
+    }
+
+    public void NewPickPlayer()
+    {
+        if (isYoung)
+        {
+            switch (gm.GetStage())
+            {
+                case 0:
+                    SpriteRenderer.sprite = young.playerSprite;
+                    Speed = young.Speed;
+                    Jump = young.Jump;
+                    break;
+                case 1:
+                    SpriteRenderer.sprite = young1.playerSprite;
+                    Speed = young.Speed;
+                    Jump = young.Jump;
+                    break;
+                case 2:
+                    SpriteRenderer.sprite = young2.playerSprite;
+                    Speed = young.Speed;
+                    Jump = young.Jump;
+                    break;
+                case 3:
+                    SpriteRenderer.sprite = young3.playerSprite;
+                    Speed = young.Speed;
+                    Jump = young.Jump;
+                    break;
+                case 4:
+                    SpriteRenderer.sprite = young4.playerSprite;
+                    Speed = young.Speed;
+                    Jump = young.Jump;
+                    break;
+            }
+        }
+        else
+        {
+            switch (gm.GetStage())
+            {
+                case 0:
+                    SpriteRenderer.sprite = old.playerSprite;
+                    Speed = old.Speed;
+                    Jump = old.Jump;
+                    break;                
+                case 1:
+                    SpriteRenderer.sprite = old1.playerSprite;
+                    Speed = old.Speed;
+                    Jump = old.Jump;
+                    break;
+                case 2:
+                    SpriteRenderer.sprite = old2.playerSprite;
+                    Speed = old.Speed;
+                    Jump = old.Jump;
+                    break;
+                case 3:
+                    SpriteRenderer.sprite = old3.playerSprite;
+                    Speed = old.Speed;
+                    Jump = old.Jump;
+                    break;
+                case 4:
+                    SpriteRenderer.sprite = old4.playerSprite;
+                    Speed = old.Speed;
+                    Jump = old.Jump;
+                    break;
+            }
+        }
+
     }
 }
